@@ -1,0 +1,121 @@
+{
+  "platform": "IOS XR, ASR 9000 7.11.x reference",
+  "validation": "documented CLI and topology model, no router or emulator execution",
+  "isis": {
+    "instance": "CORE",
+    "level": 2,
+    "area": "49.0001"
+  },
+  "srgb": {
+    "first": 16000,
+    "last": 23999
+  },
+  "nodes": [
+    {
+      "name": "PE1",
+      "loopback": "10.0.0.1/32",
+      "net": "49.0001.0000.0000.0001.00",
+      "prefixSidIndex": 1
+    },
+    {
+      "name": "P1",
+      "loopback": "10.0.0.2/32",
+      "net": "49.0001.0000.0000.0002.00",
+      "prefixSidIndex": 2
+    },
+    {
+      "name": "P2",
+      "loopback": "10.0.0.3/32",
+      "net": "49.0001.0000.0000.0003.00",
+      "prefixSidIndex": 3
+    },
+    {
+      "name": "PE2",
+      "loopback": "10.0.0.4/32",
+      "net": "49.0001.0000.0000.0004.00",
+      "prefixSidIndex": 4
+    }
+  ],
+  "links": [
+    {
+      "metricEachDirection": 10,
+      "subnet": "10.0.12.0/31",
+      "endpoints": [
+        {
+          "node": "PE1",
+          "interface": "GigabitEthernet0/0/0/0",
+          "address": "10.0.12.0"
+        },
+        {
+          "node": "P1",
+          "interface": "GigabitEthernet0/0/0/0",
+          "address": "10.0.12.1"
+        }
+      ]
+    },
+    {
+      "metricEachDirection": 20,
+      "subnet": "10.0.13.0/31",
+      "endpoints": [
+        {
+          "node": "PE1",
+          "interface": "GigabitEthernet0/0/0/1",
+          "address": "10.0.13.0"
+        },
+        {
+          "node": "P2",
+          "interface": "GigabitEthernet0/0/0/0",
+          "address": "10.0.13.1"
+        }
+      ]
+    },
+    {
+      "metricEachDirection": 5,
+      "subnet": "10.0.23.0/31",
+      "endpoints": [
+        {
+          "node": "P1",
+          "interface": "GigabitEthernet0/0/0/1",
+          "address": "10.0.23.0"
+        },
+        {
+          "node": "P2",
+          "interface": "GigabitEthernet0/0/0/1",
+          "address": "10.0.23.1"
+        }
+      ]
+    },
+    {
+      "metricEachDirection": 10,
+      "subnet": "10.0.24.0/31",
+      "endpoints": [
+        {
+          "node": "P1",
+          "interface": "GigabitEthernet0/0/0/2",
+          "address": "10.0.24.0"
+        },
+        {
+          "node": "PE2",
+          "interface": "GigabitEthernet0/0/0/0",
+          "address": "10.0.24.1"
+        }
+      ]
+    },
+    {
+      "metricEachDirection": 25,
+      "subnet": "10.0.34.0/31",
+      "endpoints": [
+        {
+          "node": "P2",
+          "interface": "GigabitEthernet0/0/0/2",
+          "address": "10.0.34.0"
+        },
+        {
+          "node": "PE2",
+          "interface": "GigabitEthernet0/0/0/1",
+          "address": "10.0.34.1"
+        }
+      ]
+    }
+  ]
+}

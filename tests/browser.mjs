@@ -1,0 +1,182 @@
+import assert from 'node:assert/strict'
+import { readFile, mkdir } from 'node:fs/promises'
+import { createServer } from 'node:http'
+import { resolve, sep } from 'node:path'
+import { chromium } from 'playwright'
+
+const root = resolve('dist')
+const prefix = '/sp-fast-reload/'
+const types = { js: 'text/javascript', css: 'text/css', html: 'text/html', json: 'application/json' }
+const server = createServer(async (request, response) => {
+  const url = new URL(request.url, 'http://localhost')
+  const path = resolve(root, url.pathname.slice(prefix.length) || 'index.html')
+  if (!url.pathname.startsWith(prefix) || !path.startsWith(root + sep)) {
+    response.writeHead(404).end()
+    return
+  }
+  try {
+    response.writeHead(200, { 'Content-Type': types[path.split('.').at(-1)] ?? 'application/octet-stream' }).end(await readFile(path))
+  } catch { response.destroy() }
+})
+await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve) })
+const site = 'http://127.0.0.1:' + server.address().port + prefix
+let browser
+try {
+  browser = await chromium.launch({ executablePath: process.env.SP_RELOAD_CHROME || undefined, headless: true })
+  const context = await browser.newContext({ permissions: ['clipboard-read', 'clipboard-write'], viewport: { width: 1440, height: 900 } })
+  const page = await context.newPage()
+  const failures = []
+  page.on('pageerror', error => failures.push(error.message))
+  const main = page.getByRole('main')
+  const topic = '#/technology/sr-mpls/'
+  const navigate = async (hash, heading) => {
+    await page.goto(site + hash)
+    await main.getByRole('heading', { name: heading, exact: true }).first().waitFor()
+  }
+  const screenshot = async name => {
+    if (process.env.SP_RELOAD_SCREENSHOTS) await page.screenshot({ path: 'test-results/' + name + '.png', fullPage: false })
+  }
+  if (process.env.SP_RELOAD_SCREENSHOTS) await mkdir('test-results', { recursive: true })
+  await navigate('', 'Dashboard')
+  await screenshot('dashboard')
+  await main.getByRole('link', { name: 'Start learning' }).click()
+  await page.waitForURL('**/guide/understand')
+  const paths = page.getByRole('combobox', { name: 'Preparation path' })
+  assert.equal(await paths.locator('option').count(), 7)
+  const learning = page.getByRole('navigation', { name: 'Learning stages' })
+  assert.equal(await learning.getByRole('link').count(), 8)
+  const steps = page.getByRole('region', { name: 'Preparation paths' }).locator('ol a')
+  for (const pathId of ['emergency', 'review', 'zero', 'hands-on', 'senior', 'architect', 'instructor']) {
+    await paths.selectOption(pathId)
+    assert.ok(await steps.count(), pathId)
+    for (const href of await steps.evaluateAll(links => links.map(link => link.getAttribute('href')))) {
+      assert.match(href, /^#\/technology\/sr-mpls\//)
+    }
+  }
+  await paths.selectOption('zero')
+  await page.getByRole('combobox', { name: 'My starting knowledge' }).selectOption('2')
+  await page.getByRole('combobox', { name: 'My immediate goal' }).selectOption('4')
+  assert.equal(await paths.inputValue(), 'senior')
+  await main.getByRole('button', { name: 'Mark as studied' }).click()
+  await main.getByRole('button', { name: 'Pin topic' }).click()
+  await page.reload()
+  assert.equal(await paths.inputValue(), 'senior')
+  await main.getByRole('button', { name: 'Studied', exact: true }).waitFor()
+  await main.getByRole('button', { name: 'Pinned', exact: true }).waitFor()
+
+  await page.keyboard.press('Control+k')
+  const search = page.getByRole('dialog', { name: 'Global search' })
+  await search.getByRole('textbox').fill('show mpls forwarding')
+  const cli = search.getByRole('link').filter({ hasText: 'Cisco CLI' }).first()
+  await cli.waitFor()
+  const deepLink = await cli.getAttribute('href')
+  assert.match(deepLink, /#.*#.*block-/)
+  await cli.click()
+  await page.reload()
+  const target = page.locator('[id="' + deepLink.split('#').at(-1) + '"]')
+  await target.waitFor()
+  const command = await target.locator('pre').first().innerText()
+  await target.getByRole('button', { name: /^Copy / }).click()
+  const clipboard = await page.evaluate(() => navigator.clipboard.readText())
+  assert.equal(clipboard.replaceAll('\r\n', '\n'), command)
+  await target.getByRole('button', { name: /^Bookmark / }).click()
+  await navigate('#/bookmarks', 'Bookmarks & Pinned Topics')
+  assert.equal(await main.locator('a').evaluateAll((links, href) => links.some(link => link.getAttribute('href') === href), deepLink), true)
+
+  await navigate(topic + 'reload', 'Segment Routing over MPLS')
+  const diagram = main.locator('figure').filter({ has: page.locator('figcaption') }).first()
+  await diagram.getByRole('button', { name: /^Copy / }).click()
+  const diagramClipboard = await page.evaluate(() => navigator.clipboard.readText())
+  assert.equal(diagramClipboard.replaceAll('\r\n', '\n'), await diagram.locator('pre').first().innerText())
+
+  await navigate(topic + 'operations/troubleshoot', 'Segment Routing over MPLS')
+  const fault = main.locator('section.content-unit').first()
+  assert.equal(await fault.getByRole('heading', { name: 'Root cause' }).count(), 0)
+  await fault.locator('.case-checks button').first().click()
+  await fault.getByRole('button', { name: 'Reveal diagnosis' }).click()
+  await fault.getByRole('heading', { name: 'Root cause' }).waitFor()
+  await fault.getByRole('button', { name: 'Record investigation' }).click()
+  await fault.locator('.code-frame').getByRole('button', { name: /^Bookmark / }).click()
+  await navigate('#/bookmarks', 'Bookmarks & Pinned Topics')
+  const faultBookmark = main.getByRole('link', { name: 'Check the IPv4 route on PE1' })
+  await faultBookmark.click()
+  await page.reload()
+  await main.locator('.code-frame').getByText(/IS-IS owns/).waitFor()
+  assert.equal(await main.getByRole('heading', { name: 'Root cause' }).count(), 0)
+
+  await navigate(topic + 'operations/lab', 'Lab downloads')
+  const downloadLink = main.locator('a[download]').first()
+  const labDownload = page.waitForEvent('download')
+  await downloadLink.click()
+  assert.equal(await (await labDownload).failure(), null)
+  await main.getByRole('textbox', { name: 'Evidence or observation' }).fill('Observed local repair in a simulator.')
+  await main.getByRole('button', { name: 'Save experience' }).click()
+
+  await navigate(topic + 'interview/mock', 'Segment Routing over MPLS')
+  assert.equal(await main.getByRole('heading', { name: 'Answer', exact: true }).count(), 0)
+  await main.getByRole('button', { name: 'Reveal answer' }).click()
+  await main.getByRole('button', { name: 'Missed' }).click()
+  await main.getByRole('button', { name: 'Next question' }).click()
+  await main.getByRole('button', { name: 'Previous question' }).click()
+  await main.getByRole('button', { name: 'Reveal answer' }).click()
+  assert.equal(await main.getByRole('button', { name: 'Missed' }).isDisabled(), true)
+  await main.getByRole('button', { name: 'End session' }).click()
+  await main.getByText('1 of', { exact: false }).waitFor()
+  await navigate(topic + 'interview/teach', 'Segment Routing over MPLS')
+  assert.ok(await main.locator('.content-unit').count() >= 5)
+  await navigate('#/decisions', 'Architecture Decision Center')
+
+  await navigate('#/flashcards', 'Flashcards / Anki')
+  await main.getByRole('button', { name: 'Flip card' }).click()
+  await main.getByRole('button', { name: 'Forgot', exact: true }).click()
+  await main.getByText(/Forgot recorded/).waitFor()
+  const apkgPromise = page.waitForEvent('download')
+  await main.getByRole('link', { name: 'Download full Anki deck (.apkg)' }).click()
+  const apkg = await apkgPromise
+  assert.equal(apkg.suggestedFilename(), 'sr-mpls.apkg')
+  assert.equal((await readFile(await apkg.path())).subarray(0, 2).toString(), 'PK')
+  const ankiPromise = page.waitForEvent('download')
+  await main.getByRole('button', { name: 'Export Anki TSV' }).click()
+  const anki = await ankiPromise
+  assert.match(await readFile(await anki.path(), 'utf8'), /#separator:Tab[\s\S]*#columns:ID\tFront\tBack\tTags/)
+
+  await navigate('#/readiness', 'My Readiness')
+  await main.getByText('Observed local repair in a simulator.', { exact: false }).waitFor()
+  await main.getByText(/Forgot ·/).waitFor()
+  const backupPromise = page.waitForEvent('download')
+  await main.getByRole('button', { name: 'Export Progress (JSON)' }).click()
+  const backup = await backupPromise
+  const path = await backup.path()
+  const json = JSON.parse(await readFile(path, 'utf8'))
+  assert.equal(json.version, 1)
+  assert.equal(json.pinned[0], 'sr-mpls')
+  assert.ok(Object.keys(json.reviews).length)
+  await main.getByRole('button', { name: 'Reset progress' }).click()
+  await main.getByRole('button', { name: 'Confirm reset' }).click()
+  const input = main.getByLabel('Import Progress (JSON)')
+  await input.setInputFiles({ name: 'bad.json', mimeType: 'application/json', buffer: Buffer.from('{"version":99}') })
+  await main.getByText('This progress version is unsupported.').waitFor()
+  await input.setInputFiles({ name: 'progress.json', mimeType: 'application/json', buffer: await readFile(path) })
+  await main.getByRole('button', { name: 'Replace progress' }).click()
+  await main.getByText('Backup restored.').waitFor()
+  assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('sp-fast-reload.progress'))), json)
+
+  await page.getByRole('button', { name: 'Switch to light theme' }).click()
+  await page.reload()
+  assert.equal(await page.locator('html').getAttribute('data-theme'), 'light')
+  await navigate('#/library', 'Technology Library')
+  assert.equal(await main.getByText('Not Yet Developed', { exact: true }).count(), 19)
+  await page.setViewportSize({ width: 390, height: 844 })
+  await navigate('', 'Dashboard')
+  await screenshot('mobile')
+  await page.getByRole('button', { name: 'Open navigation' }).click()
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Quick Refresh' }).click()
+  await main.getByRole('heading', { name: 'Quick Refresh', exact: true }).waitFor()
+  assert.equal(await page.getByRole('button', { name: 'Open navigation' }).getAttribute('aria-expanded'), 'false')
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true)
+  assert.deepEqual(failures, [])
+  console.log('Browser acceptance passed: nested Pages base, adaptive paths, reload, CLI copy, bookmarks, tickets, lab downloads and evidence, mock interview, instructor, architecture, flashcards, backup/restore, theme, and mobile navigation.')
+} finally {
+  await browser?.close()
+  await new Promise(resolve => server.close(resolve))
+}
