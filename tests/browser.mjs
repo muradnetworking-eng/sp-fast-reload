@@ -42,6 +42,7 @@ try {
   await main.getByRole('link', { name: 'Start learning' }).click()
   await page.waitForURL('**/guide/understand')
   const paths = page.getByRole('combobox', { name: 'Preparation path' })
+  await paths.waitFor({ state: 'visible' })
   assert.equal(await paths.locator('option').count(), 7)
   const learning = page.getByRole('navigation', { name: 'Learning stages' })
   assert.equal(await learning.getByRole('link').count(), 8)
@@ -77,6 +78,7 @@ try {
   await target.waitFor()
   const command = await target.locator('pre').first().innerText()
   await target.getByRole('button', { name: /^Copy / }).click()
+  await target.getByText('Copied', { exact: true }).waitFor()
   const clipboard = await page.evaluate(() => navigator.clipboard.readText())
   assert.equal(clipboard.replaceAll('\r\n', '\n'), command)
   await target.getByRole('button', { name: /^Bookmark / }).click()
@@ -86,6 +88,7 @@ try {
   await navigate(topic + 'reload', 'Segment Routing over MPLS')
   const diagram = main.locator('figure').filter({ has: page.locator('figcaption') }).first()
   await diagram.getByRole('button', { name: /^Copy / }).click()
+  await diagram.getByText('Copied', { exact: true }).waitFor()
   const diagramClipboard = await page.evaluate(() => navigator.clipboard.readText())
   assert.equal(diagramClipboard.replaceAll('\r\n', '\n'), await diagram.locator('pre').first().innerText())
 
@@ -163,7 +166,7 @@ try {
 
   await page.getByRole('button', { name: 'Switch to light theme' }).click()
   await page.reload()
-  assert.equal(await page.locator('html').getAttribute('data-theme'), 'light')
+  await page.locator('html[data-theme="light"]').waitFor({ state: 'attached' })
   await navigate('#/library', 'Technology Library')
   assert.equal(await main.getByText('Not Yet Developed', { exact: true }).count(), 19)
   await page.setViewportSize({ width: 390, height: 844 })
