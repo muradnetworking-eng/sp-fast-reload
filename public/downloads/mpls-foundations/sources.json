@@ -1,0 +1,81 @@
+{
+  "reviewed": "2026-11-26",
+  "validation": "Documentation review only; no device, emulator, packet capture or convergence measurement has been executed.",
+  "sources": [
+    {
+      "title": "XR7.11 LDP",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/mpls/configuration/guide/b-mpls-cg-asr9000-711x/implementing-mpls-ldp.html",
+      "scope": "XR LDP configuration, explicit-null, transport address, discovery/session and forwarding"
+    },
+    {
+      "title": "XR7.11 OSPF",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/routing/configuration/guide/b-routing-cg-asr9000-711x/implementing-ospf.html",
+      "scope": "OSPF interface hierarchy and LDP synchronization"
+    },
+    {
+      "title": "XR LDP command reference",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/mpls/command/reference/b-mpls-cr-asr9000/mpls-label-distribution-protocol-commands.html",
+      "scope": "Operational and configuration command syntax; cumulative reference"
+    },
+    {
+      "title": "XR forwarding command reference",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/mpls/command/reference/b-mpls-cr-asr9000/mpls-forwarding-commands.html",
+      "scope": "TTL propagation and forwarding inspection; cumulative reference"
+    },
+    {
+      "title": "XR7.11 MPLS forwarding",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/mpls/configuration/guide/b-mpls-cg-asr9000-711x/implementing-mpls-forwarding.html",
+      "scope": "Label overhead and MPLS forwarding"
+    },
+    {
+      "title": "Cisco XR/IOS MTU behavior",
+      "url": "https://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-xr-software/116350-trouble-ios-xr-mtu-00.html",
+      "scope": "Layer-specific MTU accounting and label headroom"
+    },
+    {
+      "title": "XR7.11 Ethernet interfaces",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/interfaces/configuration/guide/b-interfaces-hardware-component-cg-asr9000-711x/configuring-ethernet-interfaces.html",
+      "scope": "Physical interface MTU syntax"
+    },
+    {
+      "title": "IOSXE17 LDP",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/mpls/b-mpls/m_mp-ldp-overview.html",
+      "scope": "Separate IOS XE MPLS activation, identity and explicit-null syntax"
+    },
+    {
+      "title": "IOSXE17 LDP/IGP synchronization",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/mpls/b-mpls/m_mp-ldp-igp-synch.html",
+      "scope": "XE OSPF LDP synchronization"
+    },
+    {
+      "title": "RFC5036",
+      "url": "https://www.rfc-editor.org/rfc/rfc5036.html",
+      "scope": "LDP discovery, TCP transport and label mapping"
+    },
+    {
+      "title": "RFC3032",
+      "url": "https://www.rfc-editor.org/rfc/rfc3032.html",
+      "scope": "Label encoding; explicit-null restriction updated by RFC4182"
+    },
+    {
+      "title": "RFC4182",
+      "url": "https://www.rfc-editor.org/rfc/rfc4182.html",
+      "scope": "Explicit-null can occur anywhere in the label stack"
+    },
+    {
+      "title": "RFC3443",
+      "url": "https://www.rfc-editor.org/rfc/rfc3443.html",
+      "scope": "TTL processing and tunneling models"
+    },
+    {
+      "title": "CML XRv9000",
+      "url": "https://developer.cisco.com/docs/modeling-labs/ios-xrv-9000/",
+      "scope": "Manual emulator node selection and image resource caveats"
+    },
+    {
+      "title": "EVE XRv9000",
+      "url": "https://www.eve-ng.net/index.php/documentation/howtos/howto-add-cisco-xrv-9000/",
+      "scope": "Manual image/template workflow; no tested import provided"
+    }
+  ]
+}

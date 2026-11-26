@@ -1,0 +1,136 @@
+{
+  "title": "MPLS Foundations: four-node OSPF/LDP lab",
+  "reviewed": "2026-11-26",
+  "validation": "Public documentation reviewed; device and emulator execution pending.",
+  "nodes": [
+    {
+      "name": "PE1",
+      "os": "IOS XR 7.11.x (ASR 9000 syntax reference; XRv 9000 candidate)",
+      "loopback": "10.10.0.1/32",
+      "routerId": "10.10.0.1"
+    },
+    {
+      "name": "P1",
+      "os": "IOS XR 7.11.x (ASR 9000 syntax reference; XRv 9000 candidate)",
+      "loopback": "10.10.0.2/32",
+      "routerId": "10.10.0.2"
+    },
+    {
+      "name": "P2",
+      "os": "IOS XR 7.11.x (ASR 9000 syntax reference; XRv 9000 candidate)",
+      "loopback": "10.10.0.3/32",
+      "routerId": "10.10.0.3"
+    },
+    {
+      "name": "PE2",
+      "os": "IOS XR 7.11.x (ASR 9000 syntax reference; XRv 9000 candidate)",
+      "loopback": "10.10.0.4/32",
+      "routerId": "10.10.0.4"
+    }
+  ],
+  "links": [
+    {
+      "subnet": "10.10.12.0/31",
+      "cost": 10,
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "address": "10.10.12.0/31"
+      },
+      "b": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "address": "10.10.12.1/31"
+      }
+    },
+    {
+      "subnet": "10.10.13.0/31",
+      "cost": 40,
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/1",
+        "address": "10.10.13.0/31"
+      },
+      "b": {
+        "node": "P2",
+        "interface": "GigabitEthernet0/0/0/0",
+        "address": "10.10.13.1/31"
+      }
+    },
+    {
+      "subnet": "10.10.23.0/31",
+      "cost": 10,
+      "a": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/1",
+        "address": "10.10.23.0/31"
+      },
+      "b": {
+        "node": "P2",
+        "interface": "GigabitEthernet0/0/0/1",
+        "address": "10.10.23.1/31"
+      }
+    },
+    {
+      "subnet": "10.10.24.0/31",
+      "cost": 40,
+      "a": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/2",
+        "address": "10.10.24.0/31"
+      },
+      "b": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/0",
+        "address": "10.10.24.1/31"
+      }
+    },
+    {
+      "subnet": "10.10.34.0/31",
+      "cost": 10,
+      "a": {
+        "node": "P2",
+        "interface": "GigabitEthernet0/0/0/2",
+        "address": "10.10.34.0/31"
+      },
+      "b": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/1",
+        "address": "10.10.34.1/31"
+      }
+    }
+  ],
+  "igp": {
+    "protocol": "OSPFv2",
+    "process": "CORE",
+    "area": "0",
+    "loopbackCost": 1,
+    "baselineTransitCost": 30,
+    "baselineLoopbackRouteMetric": 31,
+    "failedP1P2TransitCost": 50,
+    "failedP1P2LoopbackRouteMetric": 51
+  },
+  "ldp": {
+    "addressFamily": "ipv4",
+    "transport": "Each Loopback0 address explicitly configured",
+    "labels": "Dynamically allocated; record actual values per router",
+    "serviceLabels": 0
+  },
+  "mtu": {
+    "xrInterface": 1600,
+    "ipv4": 1500,
+    "encapsulation": "Untagged Ethernet; check effective MPLS MTU on image"
+  },
+  "configDirectories": [
+    "initial",
+    "stages/01-ospf",
+    "stages/02-ldp",
+    "stages/03-explicit-null",
+    "stages/04-sync",
+    "final",
+    "optional/ttl",
+    "optional/mtu",
+    "ios-xe-reference",
+    "faults"
+  ]
+}

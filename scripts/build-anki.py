@@ -27,6 +27,10 @@ DECKS = {
         "title": "BGP / MP-BGP", "deck_id": 1888055630, "model_id": 1661307138,
         "model_name": "SP Fast-Reload BGP Basic", "template": "BGP review",
     },
+    "mpls-foundations": {
+        "title": "MPLS Foundations", "deck_id": 1888055631, "model_id": 1661307139,
+        "model_name": "SP Fast-Reload MPLS Basic", "template": "MPLS review",
+    },
 }
 
 

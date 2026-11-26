@@ -1,6 +1,6 @@
 # SP Fast-Reload
 
-A browser-local Cisco service provider engineering workspace with developed Segment Routing over MPLS and BGP / MP-BGP modules. The library includes 18 additional domains marked **Not Yet Developed**.
+A browser-local Cisco service provider engineering workspace with developed MPLS Foundations, Segment Routing over MPLS, and BGP / MP-BGP modules. The library includes 17 additional domains marked **Not Yet Developed**.
 
 ## Start locally
 
@@ -19,12 +19,20 @@ Open the local URL printed by Vite. Start at **Dashboard**, then use **15-Min Re
 | --- | --- |
 | `src/components/` | Dashboard, library, topic viewer, search, labs, practice, flashcards, and readiness |
 | `src/data/library.ts` | Technology taxonomy and module discovery |
-| `src/data/technologies/<id>/` | Independent SR-MPLS and BGP modules with a refresher, seven learning stages, recipes and lab, troubleshooting, scenarios, interviews, training, cards, and primary sources |
+| `src/data/technologies/<id>/` | Independent MPLS Foundations, SR-MPLS, and BGP modules with a refresher, seven learning stages, recipes and lab, troubleshooting, scenarios, interviews, training, cards, and primary sources |
 | `src/schemas/` and `src/lib/` | Content contract, path assembly, search index, content validation, and downloads |
 | `src/state/` | Versioned local progress, review scheduling, and evidence |
 | `public/downloads/<id>/` | Lab topology, student workbook, instructor key, configurations, ZIP, and Anki deck for each developed module |
 | `tests/` | Progress and module checks, topology assertions, and production browser acceptance |
 | `.github/workflows/deploy.yml` | GitHub Actions build and Pages deployment |
+
+## Use the MPLS Foundations module
+
+Open **Technology Library → MPLS Foundations**. Start with a FEC and follow the selected IP next hop to the downstream LDP binding and the installed label action. The refresher and seven learning stages explain discovery and session establishment, label distribution, PHP and explicit-null, TTL and traffic-class handling, MTU budgets, and verification of the actual LSP.
+
+The four-router IOS XR lab uses a three-link primary path, PE1–P1–P2–PE2, so ingress push, transit swap, and penultimate pop occur on separate routers. OSPF and LDP are built in stages. Alternate links support failure and ECMP experiments. Later checkpoints cover explicit-null, IGP/LDP synchronization, and scoped TTL/MTU exercises. Download the student workbook, separate instructor solutions, staged configurations, and complete final configurations from the lab viewer.
+
+Labels in examples are symbolic or explicitly illustrative. Record the labels allocated by your own images and compare the sender's rewrite to the next router's incoming lookup. The IPv4 baseline can fall back to ordinary IP in some LDP failure states, so record whether a probe proves IP reachability or labeled forwarding. A service-label packet walk explains the extra dependency when the core cannot route the customer destination. Device and emulator execution remain pending.
 
 ## Use the SR-MPLS module
 
@@ -56,7 +64,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-The browser test serves `dist` beneath `/sp-fast-reload/`, opens bookmarked hash routes directly, reloads them, exercises both modules, checks file downloads, and verifies isolation of their study and review data. To use an existing Chromium or Chrome executable, set `SP_RELOAD_CHROME` to its absolute path. Use `npm run preview` to preview the production build at the local URL printed by Vite.
+The browser test serves `dist` beneath `/sp-fast-reload/`, opens bookmarked hash routes directly, reloads them, exercises all three modules, checks file downloads, and verifies isolation of their study and review data. To use an existing Chromium or Chrome executable, set `SP_RELOAD_CHROME` to its absolute path. Use `npm run preview` to preview the production build at the local URL printed by Vite.
 
 ## Deploy to personal GitHub Pages
 
@@ -78,7 +86,7 @@ Vite uses a relative base and React Router uses `HashRouter`, so the static host
 
 Use **My Readiness → Export Progress (JSON)** to save a portable backup. In another browser, open **My Readiness → Import Progress (JSON)**, select the file, and confirm **Replace progress**. Use **Reset progress** and confirm to start over. The backup includes notes you entered, so store it accordingly. Each browser profile and site origin has its own data.
 
-Use **Flashcards / Anki → Export Anki TSV** to export the selected technology and subtopic. In Anki, use a note type with fields `ID`, `Front`, and `Back`. Map the final column to tags and enable HTML. Use `ID` as the first field for stable import matching. Both modules have an `.apkg` download. To regenerate a deck after changing source cards, install `genanki==0.13.1` in a Python environment after `npm ci`, then run `python scripts/build-anki.py --technology bgp` or `python scripts/build-anki.py --technology sr-mpls`. The builder verifies the package's SQLite integrity, stable note GUIDs, card linkage, and exact source fields before replacing the output file.
+Use **Flashcards / Anki → Export Anki TSV** to export the selected technology and subtopic. In Anki, use a note type with fields `ID`, `Front`, and `Back`. Map the final column to tags and enable HTML. Use `ID` as the first field for stable import matching. Each developed module has an `.apkg` download. To regenerate a deck after changing source cards, install `genanki==0.13.1` in a Python environment after `npm ci`, then run `python scripts/build-anki.py --technology <id>` with `mpls-foundations`, `bgp`, or `sr-mpls`. The builder verifies the package's SQLite integrity, stable note GUIDs, card linkage, and exact source fields before replacing the output file.
 
 ## Add the next technology
 
