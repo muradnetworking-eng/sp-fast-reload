@@ -8,6 +8,7 @@ Choose one entry from `src/data/library.ts` and retain its ID. Add a directory n
 4. List primary sources and their scope, document the exact CLI OS and applicable platform or release, and record the review date. Use distinct labels for modeled results and device captures.
 5. Add relative download paths below `public/downloads/<id>/`. Include a topology, addressing, student tasks, staged configs, final configs, and separate instructor solutions. Provide manual setup steps when emulator import compatibility is unverified.
 6. Use `checkContent` in a test for the new module. Validate important model invariants for the lab and check search, deep links, review scheduling, and all seven paths in the production build. Add browser checks when the module introduces a distinct behavior or regression risk.
+7. For an Anki package, register stable deck and model identifiers in `scripts/build-anki.py`, run it with `--technology <id>`, and add the relative package path to `ankiPackage`. Keep existing identifiers and card GUID inputs stable when revising a deck.
 
 ## Reusable Codex instruction
 

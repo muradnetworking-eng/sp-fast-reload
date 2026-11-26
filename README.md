@@ -1,6 +1,6 @@
 # SP Fast-Reload
 
-A browser-local Cisco service provider engineering workspace. Segment Routing over MPLS is the first developed module. The library includes 19 additional domains marked **Not Yet Developed**.
+A browser-local Cisco service provider engineering workspace with developed Segment Routing over MPLS and BGP / MP-BGP modules. The library includes 18 additional domains marked **Not Yet Developed**.
 
 ## Start locally
 
@@ -19,10 +19,10 @@ Open the local URL printed by Vite. Start at **Dashboard**, then use **15-Min Re
 | --- | --- |
 | `src/components/` | Dashboard, library, topic viewer, search, labs, practice, flashcards, and readiness |
 | `src/data/library.ts` | Technology taxonomy and module discovery |
-| `src/data/technologies/sr-mpls/` | SR-MPLS refresher, seven learning stages, implementation and lab, troubleshooting, scenarios, interviews, training, cards, and primary sources |
+| `src/data/technologies/<id>/` | Independent SR-MPLS and BGP modules with a refresher, seven learning stages, recipes and lab, troubleshooting, scenarios, interviews, training, cards, and primary sources |
 | `src/schemas/` and `src/lib/` | Content contract, path assembly, search index, content validation, and downloads |
 | `src/state/` | Versioned local progress, review scheduling, and evidence |
-| `public/downloads/sr-mpls/` | Lab topology, student workbook, instructor key, configurations, ZIP, and Anki deck |
+| `public/downloads/<id>/` | Lab topology, student workbook, instructor key, configurations, ZIP, and Anki deck for each developed module |
 | `tests/` | Progress and module checks, topology assertions, and production browser acceptance |
 | `.github/workflows/deploy.yml` | GitHub Actions build and Pages deployment |
 
@@ -35,6 +35,16 @@ Open the local URL printed by Vite. Start at **Dashboard**, then use **15-Min Re
 
 The lab uses Cisco ASR 9000 IOS XR 7.11.x documentation as its primary command reference and includes a scoped IOS XE 17.x comparison. Technical references and review date appear in the viewer. Expected CLI results are explicitly illustrative. Automated checks cover topology addressing, config consistency, label-index and link-cost expectations. The configuration has not been executed on a Cisco router or emulator. Check your exact image, release and platform for OAM, repair, supported stack depth, and dataplane fidelity before relying on those capabilities.
 
+## Use the BGP / MP-BGP module
+
+Open **Technology Library → BGP / MP-BGP**. Use the refresher to recover session, policy, next-hop, and best-path checks, or follow the seven stages from a first route advertisement to architecture and instruction.
+
+The practical lab uses four IOS XR core routers and two IOS XE customer routers. First build IPv4 and IPv6 unicast peering through a route reflector, including the routes required by the transit router. Then move the customer interfaces into the CORAL VRF and build VPNv4/VPNv6 distribution over an MPLS/LDP core. The workbook explains each conversion and provides complete global and VPN checkpoints. An optional second CE link supports preference and failover experiments. The single-reflector base lab has explicit availability limits.
+
+Troubleshooting starts from observed symptoms and hides the diagnosis until you choose a check. Exercises cover address-family capabilities, policy disposition, attribute comparison, route reflection, RIB/FIB resolution, and the separate service and transport labels. Architecture cases, mock interviews, instructor preparation, and flashcards reuse the same mechanisms and lab plan.
+
+Progress, preferences, bookmarks, and review histories are scoped by technology. Existing SR-MPLS JSON backups remain compatible. CLI is referenced to IOS XR 7.11.x and scoped IOS XE 17.x guides. Expected outputs are modeled, and device or emulator execution is pending.
+
 ## Verify the build
 
 ```sh
@@ -46,7 +56,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-The browser test serves `dist` beneath `/sp-fast-reload/`, opens bookmarked hash routes directly, reloads them, exercises the study flows and checks file downloads. To use an existing Chromium or Chrome executable, set `SP_RELOAD_CHROME` to its absolute path. Use `npm run preview` to preview the production build at the local URL printed by Vite.
+The browser test serves `dist` beneath `/sp-fast-reload/`, opens bookmarked hash routes directly, reloads them, exercises both modules, checks file downloads, and verifies isolation of their study and review data. To use an existing Chromium or Chrome executable, set `SP_RELOAD_CHROME` to its absolute path. Use `npm run preview` to preview the production build at the local URL printed by Vite.
 
 ## Deploy to personal GitHub Pages
 
@@ -68,7 +78,7 @@ Vite uses a relative base and React Router uses `HashRouter`, so the static host
 
 Use **My Readiness → Export Progress (JSON)** to save a portable backup. In another browser, open **My Readiness → Import Progress (JSON)**, select the file, and confirm **Replace progress**. Use **Reset progress** and confirm to start over. The backup includes notes you entered, so store it accordingly. Each browser profile and site origin has its own data.
 
-Use **Flashcards / Anki → Export Anki TSV** to export the selected technology and subtopic. In Anki, use a note type with fields `ID`, `Front`, and `Back`. Map the final column to tags and enable HTML. Use `ID` as the first field for stable import matching. The full SR-MPLS deck is also available as an `.apkg` in the app. All 18 cards imported into a fresh collection with the Anki backend and re-imported without duplicates. To regenerate it after changing the source cards, run `python -m pip install genanki==0.13.1` followed by `python scripts/build-anki.py` after `npm ci`.
+Use **Flashcards / Anki → Export Anki TSV** to export the selected technology and subtopic. In Anki, use a note type with fields `ID`, `Front`, and `Back`. Map the final column to tags and enable HTML. Use `ID` as the first field for stable import matching. Both modules have an `.apkg` download. To regenerate a deck after changing source cards, install `genanki==0.13.1` in a Python environment after `npm ci`, then run `python scripts/build-anki.py --technology bgp` or `python scripts/build-anki.py --technology sr-mpls`. The builder verifies the package's SQLite integrity, stable note GUIDs, card linkage, and exact source fields before replacing the output file.
 
 ## Add the next technology
 

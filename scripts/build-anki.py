@@ -1,9 +1,11 @@
-"""Build and verify the SR-MPLS Anki deck from the application's flashcards.
+"""Build and verify a technology's Anki deck from the application's flashcards.
 
 Requires npm ci and python -m pip install genanki==0.13.1.
 Run from the checkout with python scripts/build-anki.py.
+Pass --technology bgp to build the BGP / MP-BGP deck.
 """
 
+import argparse
 from contextlib import closing
 from html import escape
 import json
@@ -16,14 +18,22 @@ from zipfile import ZipFile
 import genanki
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "public" / "downloads" / "sr-mpls" / "sr-mpls.apkg"
-DECK_ID = 1888055629
-MODEL_ID = 1661307137
+DECKS = {
+    "sr-mpls": {
+        "title": "SR-MPLS", "deck_id": 1888055629, "model_id": 1661307137,
+        "model_name": "SP Fast-Reload Basic", "template": "SR-MPLS review",
+    },
+    "bgp": {
+        "title": "BGP / MP-BGP", "deck_id": 1888055630, "model_id": 1661307138,
+        "model_name": "SP Fast-Reload BGP Basic", "template": "BGP review",
+    },
+}
 
 
-def load_cards():
-    script = """
-        import { cards } from './src/data/technologies/sr-mpls/practice.ts';
+def load_cards(technology):
+    module = f"./src/data/technologies/{technology}/practice.ts"
+    script = f"""
+        import {{ cards }} from {json.dumps(module)};
         process.stdout.write(JSON.stringify(cards));
     """
     data = subprocess.check_output(
@@ -38,15 +48,15 @@ def load_cards():
     return cards
 
 
-def write_package(cards, path):
-    deck = genanki.Deck(DECK_ID, "SP Fast-Reload::SR-MPLS")
+def write_package(cards, path, technology, settings):
+    deck = genanki.Deck(settings["deck_id"], "SP Fast-Reload::" + settings["title"])
     model = genanki.Model(
-        MODEL_ID,
-        "SP Fast-Reload Basic",
+        settings["model_id"],
+        settings["model_name"],
         fields=[{"name": "Front"}, {"name": "Back"}],
         templates=[
             {
-                "name": "SR-MPLS review",
+                "name": settings["template"],
                 "qfmt": "{{Front}}",
                 "afmt": '{{FrontSide}}<hr id="answer">{{Back}}',
             },
@@ -56,15 +66,15 @@ def write_package(cards, path):
     expected = {}
     for card in cards:
         fields = [escape(card[key]).replace("\n", "<br>") for key in ("front", "back")]
-        guid = genanki.guid_for("sp-fast-reload", "sr-mpls", card["id"])
-        tags = ["SR-MPLS", card["subtopic"].replace(" ", "_")]
+        guid = genanki.guid_for("sp-fast-reload", technology, card["id"])
+        tags = [technology.upper(), card["subtopic"].replace(" ", "_")]
         deck.add_note(genanki.Note(model=model, fields=fields, tags=tags, guid=guid))
         expected[guid] = "\x1f".join(fields)
     genanki.Package(deck).write_to_file(path)
     return expected
 
 
-def verify_package(package_path, expected):
+def verify_package(package_path, expected, settings):
     database_path = package_path.with_suffix(".anki2")
     with ZipFile(package_path) as package:
         if package.testzip() is not None or json.loads(package.read("media")) != {}:
@@ -73,10 +83,10 @@ def verify_package(package_path, expected):
 
     with closing(sqlite3.connect(database_path)) as database:
         integrity = database.execute("PRAGMA integrity_check").fetchone()
-        actual = dict(database.execute("SELECT guid, flds FROM notes WHERE mid = ?", (MODEL_ID,)))
+        actual = dict(database.execute("SELECT guid, flds FROM notes WHERE mid = ?", (settings["model_id"],)))
         matching_cards = database.execute(
             "SELECT count(*) FROM cards JOIN notes ON cards.nid = notes.id WHERE cards.did = ?",
-            (DECK_ID,),
+            (settings["deck_id"],),
         ).fetchone()[0]
         card_count = database.execute("SELECT count(*) FROM cards").fetchone()[0]
         note_count = database.execute("SELECT count(*) FROM notes").fetchone()[0]
@@ -87,14 +97,19 @@ def verify_package(package_path, expected):
 
 
 def main():
-    cards = load_cards()
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    with TemporaryDirectory(dir=OUTPUT.parent) as temporary_directory:
-        staged_path = Path(temporary_directory) / OUTPUT.name
-        expected = write_package(cards, staged_path)
-        verify_package(staged_path, expected)
-        staged_path.replace(OUTPUT)
-    print(f"Verified {len(cards)} cards in {OUTPUT.relative_to(ROOT)}")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--technology", choices=DECKS, default="sr-mpls")
+    technology = parser.parse_args().technology
+    settings = DECKS[technology]
+    output = ROOT / "public" / "downloads" / technology / f"{technology}.apkg"
+    cards = load_cards(technology)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(dir=output.parent) as temporary_directory:
+        staged_path = Path(temporary_directory) / output.name
+        expected = write_package(cards, staged_path, technology, settings)
+        verify_package(staged_path, expected, settings)
+        staged_path.replace(output)
+    print(f"Verified {len(cards)} cards in {output.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

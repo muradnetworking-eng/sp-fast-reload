@@ -73,6 +73,7 @@ export interface Technology {
   title: string
   category: string
   description: string
+  dashboardDiagram?: string
   prerequisites: string[]
   reviewed: string
   sources: Source[]

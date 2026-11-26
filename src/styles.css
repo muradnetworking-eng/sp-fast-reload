@@ -85,14 +85,6 @@ main { max-width: 1320px; margin: 0 auto; padding: 2.65rem clamp(1rem, 4vw, 3.25
 .hero-content > p:not(.kicker) { margin: .6rem 0 1.15rem; color: var(--muted); }
 .hero-content > .resume-caption { font-size: .78rem; margin-bottom: 0 !important; }
 .hero-topology { display: flex; justify-content: center; align-items: center; gap: clamp(1rem, 3.2vw, 3rem); color: var(--accent); }
-.topology-node, .topology-middle span { position: relative; display: grid; place-items: center; z-index: 1; width: 47px; height: 39px; border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--line)); border-radius: .44rem; background: var(--panel); font: .75rem "IBM Plex Mono", "Cascadia Mono", Consolas, monospace; }
-.topology-middle { position: relative; display: grid; gap: 36px; }
-.topology-middle::before { content: ""; position: absolute; left: 50%; top: 20px; bottom: 20px; border-left: 1px dashed var(--accent); opacity: .65; }
-.topology-middle span::before, .topology-middle span::after { position: absolute; content: ""; width: clamp(1.1rem, 3.4vw, 3.1rem); top: 50%; border-top: 1px solid var(--accent); opacity: .55; }
-.topology-middle span::before { right: 100%; transform: rotate(-36deg); transform-origin: right; }
-.topology-middle span::after { left: 100%; transform: rotate(36deg); transform-origin: left; }
-.topology-middle span:last-child::before { transform: rotate(36deg); }
-.topology-middle span:last-child::after { transform: rotate(-36deg); }
 .summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; }
 .summary-cell { padding: 1rem 1.15rem; display: grid; align-content: start; gap: .25rem; }
 .summary-cell > span { display: flex; align-items: center; gap: .48rem; font-size: .8rem; color: var(--muted); }

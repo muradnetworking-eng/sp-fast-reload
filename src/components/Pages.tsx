@@ -51,7 +51,7 @@ export function Dashboard() {
       <div className="hero-content"><p className="kicker"><span className="live-dot" />{progress.pinned.includes(featured.id) ? 'Pinned technology' : 'Featured technology'}</p><h2>{featured.title}</h2><p>{featured.description}</p>
       <div className="row wrap"><Link className="button primary" to={recent?.href ?? topicUrl(featured.id, 'guide', 'understand')}>{recent ? 'Resume last session' : 'Start learning'}<ArrowRight size={17} /></Link><Link className="button secondary" to={topicUrl(featured.id)}>15-Min Reload</Link></div>
       {recent && <p className="resume-caption">Last opened {recent.title}</p>}</div>
-      <div className="hero-topology" aria-hidden="true"><div className="topology-node">PE1</div><div className="topology-middle"><span>P1</span><span>P2</span></div><div className="topology-node">PE2</div></div>
+      {featured.dashboardDiagram && <div className="hero-topology" aria-hidden="true"><pre><code>{featured.dashboardDiagram}</code></pre></div>}
     </section>}
     <div className="summary-grid dashboard-summary">
       <Link to="/readiness" className="panel summary-cell"><span><BookOpen size={17} />Study progress</span><strong>{stages} / {stageTotal}</strong><small>Learning stages studied</small></Link>

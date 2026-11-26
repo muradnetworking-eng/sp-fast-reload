@@ -1,0 +1,209 @@
+{
+  "title": "BGP and MP-BGP six-node manual lab",
+  "validation": "Documentation-reviewed CLI and addressing model. No router or emulator execution recorded.",
+  "coreAS": 65000,
+  "nodes": [
+    {
+      "name": "PE1",
+      "os": "IOS XR ASR 9000 7.11.x reference",
+      "loopback4": "10.0.0.1/32",
+      "loopback6": "2001:db8:0::1/128",
+      "asn": 65000,
+      "net": "49.0001.0000.0000.0001.00"
+    },
+    {
+      "name": "P1",
+      "os": "IOS XR ASR 9000 7.11.x reference",
+      "loopback4": "10.0.0.2/32",
+      "loopback6": "2001:db8:0::2/128",
+      "asn": 65000,
+      "net": "49.0001.0000.0000.0002.00"
+    },
+    {
+      "name": "PE2",
+      "os": "IOS XR ASR 9000 7.11.x reference",
+      "loopback4": "10.0.0.3/32",
+      "loopback6": "2001:db8:0::3/128",
+      "asn": 65000,
+      "net": "49.0001.0000.0000.0003.00"
+    },
+    {
+      "name": "RR1",
+      "os": "IOS XR ASR 9000 7.11.x reference",
+      "loopback4": "10.0.0.4/32",
+      "loopback6": "2001:db8:0::4/128",
+      "asn": 65000,
+      "net": "49.0001.0000.0000.0004.00"
+    },
+    {
+      "name": "CE1",
+      "os": "IOS XE 17, Catalyst 8000V / CSR1000V compatible interface mapping",
+      "loopback4": "192.0.2.11/32",
+      "loopback6": "2001:db8:101:100::11/128",
+      "asn": 65101
+    },
+    {
+      "name": "CE2",
+      "os": "IOS XE 17, Catalyst 8000V / CSR1000V compatible interface mapping",
+      "loopback4": "198.51.100.22/32",
+      "loopback6": "2001:db8:102:100::22/128",
+      "asn": 65102
+    }
+  ],
+  "links": [
+    {
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.12.0/31",
+        "ipv6": "2001:db8:12::0/127"
+      },
+      "b": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.12.1/31",
+        "ipv6": "2001:db8:12::1/127"
+      },
+      "subnet4": "10.0.12.0/31",
+      "subnet6": "2001:db8:12::/127",
+      "role": "core",
+      "isisMetric": 10
+    },
+    {
+      "a": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "10.0.23.0/31",
+        "ipv6": "2001:db8:23::0/127"
+      },
+      "b": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.23.1/31",
+        "ipv6": "2001:db8:23::1/127"
+      },
+      "subnet4": "10.0.23.0/31",
+      "subnet6": "2001:db8:23::/127",
+      "role": "core",
+      "isisMetric": 10
+    },
+    {
+      "a": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/2",
+        "ipv4": "10.0.24.0/31",
+        "ipv6": "2001:db8:24::0/127"
+      },
+      "b": {
+        "node": "RR1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.24.1/31",
+        "ipv6": "2001:db8:24::1/127"
+      },
+      "subnet4": "10.0.24.0/31",
+      "subnet6": "2001:db8:24::/127",
+      "role": "core",
+      "isisMetric": 10
+    },
+    {
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "172.16.101.1/30",
+        "ipv6": "2001:db8:101:1::1/64"
+      },
+      "b": {
+        "node": "CE1",
+        "interface": "GigabitEthernet1",
+        "ipv4": "172.16.101.2/30",
+        "ipv6": "2001:db8:101:1::2/64"
+      },
+      "subnet4": "172.16.101.0/30",
+      "subnet6": "2001:db8:101:1::/64",
+      "role": "customer"
+    },
+    {
+      "a": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "172.16.102.1/30",
+        "ipv6": "2001:db8:102:1::1/64"
+      },
+      "b": {
+        "node": "CE2",
+        "interface": "GigabitEthernet1",
+        "ipv4": "172.16.102.2/30",
+        "ipv6": "2001:db8:102:1::2/64"
+      },
+      "subnet4": "172.16.102.0/30",
+      "subnet6": "2001:db8:102:1::/64",
+      "role": "customer"
+    },
+    {
+      "a": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/2",
+        "ipv4": "172.16.111.1/30",
+        "ipv6": "2001:db8:111:1::1/64"
+      },
+      "b": {
+        "node": "CE1",
+        "interface": "GigabitEthernet2",
+        "ipv4": "172.16.111.2/30",
+        "ipv6": "2001:db8:111:1::2/64"
+      },
+      "subnet4": "172.16.111.0/30",
+      "subnet6": "2001:db8:111:1::/64",
+      "role": "optional"
+    }
+  ],
+  "phases": [
+    {
+      "name": "Global unicast",
+      "reflector": "RR1",
+      "clients": [
+        "PE1",
+        "P1",
+        "PE2"
+      ],
+      "families": {
+        "ipv4": "IPv4 Loopback0 sessions",
+        "ipv6": "IPv6 Loopback0 sessions"
+      },
+      "nextHopSelf": "PE global unicast AF toward RR only"
+    },
+    {
+      "name": "VPNv4 and VPNv6",
+      "reflector": "RR1",
+      "clients": [
+        "PE1",
+        "PE2"
+      ],
+      "families": {
+        "vpnv4": "IPv4 Loopback0 sessions",
+        "vpnv6": "IPv4 Loopback0 sessions"
+      },
+      "transport": "LDP IPv4 PE1–P1–PE2",
+      "nextHopSelf": "Preserve PE next hop. No next-hop-self at RR."
+    }
+  ],
+  "vpn": {
+    "vrf": "CORAL",
+    "rt": "65000:100",
+    "rdByNode": {
+      "PE1": "65000:101",
+      "PE2": "65000:102"
+    }
+  },
+  "configDirectories": [
+    "initial",
+    "stages/01-isis",
+    "stages/02-global-bgp",
+    "stages/03-ldp",
+    "stages/04-vpn",
+    "final-global",
+    "final-vpn",
+    "optional-global",
+    "optional-vpn"
+  ]
+}

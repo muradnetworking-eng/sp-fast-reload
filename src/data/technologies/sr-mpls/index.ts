@@ -7,6 +7,7 @@ export const technology = {
   id: 'sr-mpls',
   title: 'Segment Routing over MPLS',
   category: 'Transport',
+  dashboardDiagram: '       P1\n      / | \\\n   PE1  |  PE2\n      \\ | /\n       P2',
   description: 'Trace how IGP advertisements become MPLS forwarding state. Build an IOS XR core, test local repair, and work through a staged LDP migration.',
   reviewed: '2026-11-14',
   ankiPackage: 'downloads/sr-mpls/sr-mpls.apkg',
