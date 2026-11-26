@@ -1,0 +1,207 @@
+{
+  "technology": "mpls-l3vpn",
+  "reviewed": "2026-11-27",
+  "validation": "Primary documentation reviewed. Configurations and illustrative outputs have not been executed on Cisco devices or emulators.",
+  "sources": [
+    {
+      "title": "RFC 4364 · BGP/MPLS IP Virtual Private Networks",
+      "url": "https://www.rfc-editor.org/rfc/rfc4364.html",
+      "scope": "VRFs, RD, RT, route distribution, service labels, isolation, PE–CE choices, Inter-AS A/B/C and carriers’ carriers"
+    },
+    {
+      "title": "RFC 4659 · BGP-MPLS IP VPN Extension for IPv6 VPN",
+      "url": "https://www.rfc-editor.org/rfc/rfc4659.html",
+      "scope": "VPNv6 NLRI, next-hop encoding, IPv6 service over IPv4 MPLS and multi-AS considerations"
+    },
+    {
+      "title": "RFC 4760 · Multiprotocol Extensions for BGP-4",
+      "url": "https://www.rfc-editor.org/rfc/rfc4760.html",
+      "scope": "AFI/SAFI capabilities and MP_REACH_NLRI / MP_UNREACH_NLRI"
+    },
+    {
+      "title": "RFC 4360 · BGP Extended Communities Attribute",
+      "url": "https://www.rfc-editor.org/rfc/rfc4360.html",
+      "scope": "Typed extended communities including route targets and site of origin"
+    },
+    {
+      "title": "RFC 8277 · Using BGP to Bind MPLS Labels to Address Prefixes",
+      "url": "https://www.rfc-editor.org/rfc/rfc8277.html",
+      "scope": "Labeled NLRI encoding and label/next-hop binding; obsoletes RFC 3107"
+    },
+    {
+      "title": "RFC 4456 · BGP Route Reflection",
+      "url": "https://www.rfc-editor.org/rfc/rfc4456.html",
+      "scope": "Client reflection, path hiding, ORIGINATOR_ID and CLUSTER_LIST"
+    },
+    {
+      "title": "RFC 7911 · Advertisement of Multiple Paths in BGP",
+      "url": "https://www.rfc-editor.org/rfc/rfc7911.html",
+      "scope": "Negotiated Add-Path capability and distinct path identifiers"
+    },
+    {
+      "title": "RFC 9107 · BGP Optimal Route Reflection",
+      "url": "https://www.rfc-editor.org/rfc/rfc9107.html",
+      "scope": "Client-oriented best-path computation, distinct from retaining more paths"
+    },
+    {
+      "title": "RFC 4684 · Constrained Route Distribution for BGP/MPLS IP VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc4684.html",
+      "scope": "Route-target membership NLRI, AFI 1 / SAFI 132 and constrained advertisement"
+    },
+    {
+      "title": "RFC 4577 · OSPF as the PE/CE Protocol for BGP/MPLS IP VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc4577.html",
+      "scope": "OSPFv2 superbackbone, domain identifiers, route types, DN bit, VPN route tags and sham links"
+    },
+    {
+      "title": "RFC 4576 · Using an LSA Options Bit to Prevent Looping in BGP/MPLS IP VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc4576.html",
+      "scope": "OSPF DN-bit loop prevention"
+    },
+    {
+      "title": "RFC 4798 · Connecting IPv6 Islands over IPv4 MPLS Using IPv6 Provider Edge Routers",
+      "url": "https://www.rfc-editor.org/rfc/rfc4798.html",
+      "scope": "6PE global IPv6 labeled-unicast compared with VRF-based 6VPE"
+    },
+    {
+      "title": "RFC 3032 · MPLS Label Stack Encoding",
+      "url": "https://www.rfc-editor.org/rfc/rfc3032.html",
+      "scope": "Four-byte entries, S bit and implicit/explicit-null values"
+    },
+    {
+      "title": "RFC 4182 · Removing a Restriction on MPLS Explicit NULL",
+      "url": "https://www.rfc-editor.org/rfc/rfc4182.html",
+      "scope": "Explicit-null may appear above another label"
+    },
+    {
+      "title": "RFC 5036 · LDP Specification",
+      "url": "https://www.rfc-editor.org/rfc/rfc5036.html",
+      "scope": "Core transport label bindings and adjacency/session dependencies"
+    },
+    {
+      "title": "RFC 3443 · TTL Processing in MPLS Networks",
+      "url": "https://www.rfc-editor.org/rfc/rfc3443.html",
+      "scope": "Uniform, pipe and short-pipe TTL models"
+    },
+    {
+      "title": "RFC 8029 · Detecting MPLS Data-Plane Failures",
+      "url": "https://www.rfc-editor.org/rfc/rfc8029.html",
+      "scope": "MPLS echo and traceroute evidence, return paths and FEC validation"
+    },
+    {
+      "title": "RFC 4781 · Graceful Restart Mechanism for BGP with MPLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc4781.html",
+      "scope": "Restart behavior depends on preservation of label forwarding state"
+    },
+    {
+      "title": "RFC 8661 · Segment Routing MPLS Interworking with LDP",
+      "url": "https://www.rfc-editor.org/rfc/rfc8661.html",
+      "scope": "Transport coexistence and migration while retaining the VPN service control plane"
+    },
+    {
+      "title": "RFC 4381 · Analysis of the Security of BGP/MPLS IP VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc4381.html",
+      "scope": "Provider trust assumptions, isolation and limits of confidentiality"
+    },
+    {
+      "title": "RFC 6513 · Multicast in MPLS/BGP IP VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc6513.html",
+      "scope": "Multicast requires its own service and provider-tunnel mechanisms"
+    },
+    {
+      "title": "RFC 6514 · BGP Encodings and Procedures for Multicast in MPLS/BGP IP VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc6514.html",
+      "scope": "Multicast VPN signaling is separate from unicast VPN AFs"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · MPLS Layer 3 VPNs",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l3vpn/configuration/guide/b-l3vpn-cg-asr9000-711x/implementing-mpls-layer-3-VPNs.html",
+      "scope": "VRF/RT/RD configuration, PE–CE routing, verification, IPv4 Inter-AS and CSC. Read feature-specific restrictions rather than generalizing IPv6 support."
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · IPv6 VPN Provider Edge Transport",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l3vpn/configuration/guide/b-l3vpn-cg-asr9000-711x/implementing-ipv6-VPN-provider-edge-transport-over-mpls.html",
+      "scope": "6VPE configuration, IPv4 LDP transport and XR display of the actual IPv4 next hop"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · BGP",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/routing/configuration/guide/b-routing-cg-asr9000-711x/implementing-bgp.html",
+      "scope": "VPN families, RRs, RT retention, route-target constraint, label modes and convergence dependencies"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · Routing Policy",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/routing/configuration/guide/b-routing-cg-asr9000-711x/implementing-routing-policy.html",
+      "scope": "Prefix sets, explicit pass/drop, BGP policy attach points and extended community handling"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · OSPF",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/routing/configuration/guide/b-routing-cg-asr9000-711x/implementing-ospf.html",
+      "scope": "VRF OSPF, domain ID, PE–CE behavior and OSPFv2 sham-link prerequisites"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · Static Routes",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/routing/configuration/guide/b-routing-cg-asr9000-711x/implementing-static-routes.html",
+      "scope": "VRF-scoped static route hierarchy and next-hop resolution"
+    },
+    {
+      "title": "Cisco ASR 9000 · BGP Command Reference",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/routing/command/reference/b-routing-cr-asr9000/bgp-commands.html",
+      "scope": "Family-qualified show commands, label modes, RR retention, send-side AS-loop checks and native as-override/as-path-loopcheck deprecation in 7.11.1"
+    },
+    {
+      "title": "Cisco ASR 9000 · Routing Policy Language Commands",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/routing/command/reference/b-routing-cr-asr9000/routing-policy-language-commands.html",
+      "scope": "Prefix conditions and replace as-path sequence replacement with the configured local AS; distinguish this from replacing the whole path or removing private ASes"
+    },
+    {
+      "title": "Cisco ASR 9000 · CEF Command Reference",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/ip-addresses/command/reference/b-ip-addresses-cr-asr9000/b-ipaddr-cr-asr9k_chapter_011.html",
+      "scope": "VRF IPv4/IPv6 CEF, recursion and label rewrite evidence"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · MPLS LDP",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/mpls/configuration/guide/b-mpls-cg-asr9000-711x/implementing-mpls-ldp.html",
+      "scope": "Transport IDs, core activation and transport label verification"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · MPLS OAM",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/mpls/configuration/guide/b-mpls-cg-asr9000-711x/implementing-mpls-oam.html",
+      "scope": "MPLS ping/traceroute and distinction between transport and customer-service tests"
+    },
+    {
+      "title": "Cisco ASR 9000 · MPLS Forwarding Commands",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/mpls/command/reference/b-mpls-cr-asr9000/mpls-forwarding-commands.html",
+      "scope": "Incoming-label lookup, outgoing operations and LFIB verification"
+    },
+    {
+      "title": "Cisco IOS XE 17 · BGP 4",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_irg-bgp4.html",
+      "scope": "CE neighbor activation, network statements, route maps and prefix filtering"
+    },
+    {
+      "title": "Cisco IOS XE 17 · MP-BGP Extensions for IPv6",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_ip6-mbgp-ext-xe.html",
+      "scope": "IPv6 CE address family, next hops and AF-specific policy"
+    },
+    {
+      "title": "Cisco IOS XE 17 · MPLS Layer 3 VPNs",
+      "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-17/mp-l3-vpns-xe-17-book.html",
+      "scope": "Scoped IOS/XE comparison for VRF definitions, VPN BGP and allocation modes; support still depends on platform/image"
+    },
+    {
+      "title": "Cisco IOS XE 17 · Per-VRF BGP Router ID",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_irg-router-id-0.html",
+      "scope": "Per-VRF identity and scoped CE allowas-in syntax"
+    },
+    {
+      "title": "Cisco TAC · MTU Behavior on IOS XR and IOS",
+      "url": "https://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-xr-software/116350-trouble-ios-xr-mtu-00.html",
+      "scope": "XR physical MTU includes Ethernet header; distinguish IP/MPLS payload ceilings and verify hardware accounting"
+    },
+    {
+      "title": "Cisco Modeling Labs · IOS XRv 9000",
+      "url": "https://developer.cisco.com/docs/modeling-labs/ios-xrv-9000/",
+      "scope": "Virtual router resources and limits of emulator evidence"
+    }
+  ]
+}

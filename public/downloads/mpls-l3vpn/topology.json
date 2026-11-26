@@ -1,0 +1,376 @@
+{
+  "title": "MPLS L3VPN: two overlapping dual-stack tenants",
+  "reviewed": "2026-11-27",
+  "validation": "Public documentation reviewed; no router/emulator execution or capture performed.",
+  "nodes": [
+    {
+      "name": "PE1",
+      "role": "PE",
+      "os": "IOS XR7.11.x ASR9000 syntax reference",
+      "asn": 65000,
+      "loopback4": "10.0.0.1/32",
+      "routerId": "10.0.0.1"
+    },
+    {
+      "name": "P1",
+      "role": "P",
+      "os": "IOS XR7.11.x ASR9000 syntax reference",
+      "asn": 65000,
+      "loopback4": "10.0.0.2/32",
+      "routerId": "10.0.0.2"
+    },
+    {
+      "name": "P2",
+      "role": "P",
+      "os": "IOS XR7.11.x ASR9000 syntax reference",
+      "asn": 65000,
+      "loopback4": "10.0.0.3/32",
+      "routerId": "10.0.0.3"
+    },
+    {
+      "name": "PE2",
+      "role": "PE",
+      "os": "IOS XR7.11.x ASR9000 syntax reference",
+      "asn": 65000,
+      "loopback4": "10.0.0.4/32",
+      "routerId": "10.0.0.4"
+    },
+    {
+      "name": "RR1",
+      "role": "RR",
+      "os": "IOS XR7.11.x ASR9000 syntax reference",
+      "asn": 65000,
+      "loopback4": "10.0.0.5/32",
+      "routerId": "10.0.0.5"
+    },
+    {
+      "name": "CE-A1",
+      "role": "CE",
+      "os": "IOS XE17.x C8000V reference",
+      "asn": 65011,
+      "routerId": "192.0.2.11",
+      "tenant": "ACME",
+      "site": 1,
+      "pe": "PE1",
+      "loopback4": "10.60.1.1/32",
+      "loopback6": "2001:db8:60:1::1/128"
+    },
+    {
+      "name": "CE-A2",
+      "role": "CE",
+      "os": "IOS XE17.x C8000V reference",
+      "asn": 65012,
+      "routerId": "192.0.2.12",
+      "tenant": "ACME",
+      "site": 2,
+      "pe": "PE2",
+      "loopback4": "10.60.2.2/32",
+      "loopback6": "2001:db8:60:2::2/128"
+    },
+    {
+      "name": "CE-B1",
+      "role": "CE",
+      "os": "IOS XE17.x C8000V reference",
+      "asn": 65021,
+      "routerId": "192.0.2.21",
+      "tenant": "BETA",
+      "site": 1,
+      "pe": "PE1",
+      "loopback4": "10.60.1.1/32",
+      "loopback6": "2001:db8:60:1::1/128"
+    },
+    {
+      "name": "CE-B2",
+      "role": "CE",
+      "os": "IOS XE17.x C8000V reference",
+      "asn": 65022,
+      "routerId": "192.0.2.22",
+      "tenant": "BETA",
+      "site": 2,
+      "pe": "PE2",
+      "loopback4": "10.60.2.2/32",
+      "loopback6": "2001:db8:60:2::2/128"
+    }
+  ],
+  "links": [
+    {
+      "role": "core",
+      "ldp": true,
+      "cost": 10,
+      "subnet4": "10.0.12.0/31",
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.12.0/31"
+      },
+      "b": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.12.1/31"
+      }
+    },
+    {
+      "role": "core",
+      "ldp": true,
+      "cost": 10,
+      "subnet4": "10.0.23.0/31",
+      "a": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "10.0.23.0/31"
+      },
+      "b": {
+        "node": "P2",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.23.1/31"
+      }
+    },
+    {
+      "role": "core",
+      "ldp": true,
+      "cost": 10,
+      "subnet4": "10.0.34.0/31",
+      "a": {
+        "node": "P2",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "10.0.34.0/31"
+      },
+      "b": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.34.1/31"
+      }
+    },
+    {
+      "role": "control",
+      "ldp": false,
+      "cost": 10,
+      "subnet4": "10.0.25.0/31",
+      "a": {
+        "node": "P1",
+        "interface": "GigabitEthernet0/0/0/2",
+        "ipv4": "10.0.25.0/31"
+      },
+      "b": {
+        "node": "RR1",
+        "interface": "GigabitEthernet0/0/0/0",
+        "ipv4": "10.0.25.1/31"
+      }
+    },
+    {
+      "role": "customer",
+      "ldp": false,
+      "tenant": "ACME",
+      "subnet4": "172.16.11.0/31",
+      "subnet6": "2001:db8:11::/127",
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "172.16.11.0/31",
+        "ipv6": "2001:db8:11::/127"
+      },
+      "b": {
+        "node": "CE-A1",
+        "interface": "GigabitEthernet1",
+        "ipv4": "172.16.11.1/31",
+        "ipv6": "2001:db8:11::1/127"
+      }
+    },
+    {
+      "role": "customer",
+      "ldp": false,
+      "tenant": "ACME",
+      "subnet4": "172.16.22.0/31",
+      "subnet6": "2001:db8:22::/127",
+      "a": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/1",
+        "ipv4": "172.16.22.0/31",
+        "ipv6": "2001:db8:22::/127"
+      },
+      "b": {
+        "node": "CE-A2",
+        "interface": "GigabitEthernet1",
+        "ipv4": "172.16.22.1/31",
+        "ipv6": "2001:db8:22::1/127"
+      }
+    },
+    {
+      "role": "customer",
+      "ldp": false,
+      "tenant": "BETA",
+      "subnet4": "172.16.11.0/31",
+      "subnet6": "2001:db8:11::/127",
+      "a": {
+        "node": "PE1",
+        "interface": "GigabitEthernet0/0/0/2",
+        "ipv4": "172.16.11.0/31",
+        "ipv6": "2001:db8:11::/127"
+      },
+      "b": {
+        "node": "CE-B1",
+        "interface": "GigabitEthernet1",
+        "ipv4": "172.16.11.1/31",
+        "ipv6": "2001:db8:11::1/127"
+      }
+    },
+    {
+      "role": "customer",
+      "ldp": false,
+      "tenant": "BETA",
+      "subnet4": "172.16.22.0/31",
+      "subnet6": "2001:db8:22::/127",
+      "a": {
+        "node": "PE2",
+        "interface": "GigabitEthernet0/0/0/2",
+        "ipv4": "172.16.22.0/31",
+        "ipv6": "2001:db8:22::/127"
+      },
+      "b": {
+        "node": "CE-B2",
+        "interface": "GigabitEthernet1",
+        "ipv4": "172.16.22.1/31",
+        "ipv6": "2001:db8:22::1/127"
+      }
+    }
+  ],
+  "tenants": [
+    {
+      "name": "ACME",
+      "rt": "65000:100",
+      "rdByNode": {
+        "PE1": "65000:101",
+        "PE2": "65000:102"
+      },
+      "sites": [
+        {
+          "ce": "CE-A1",
+          "pe": "PE1",
+          "asn": 65011,
+          "site": 1,
+          "vrf": "ACME",
+          "ipv4": "172.16.11.1/31",
+          "ipv6": "2001:db8:11::1/127",
+          "prefix4": "10.60.1.1/32",
+          "prefix6": "2001:db8:60:1::1/128"
+        },
+        {
+          "ce": "CE-A2",
+          "pe": "PE2",
+          "asn": 65012,
+          "site": 2,
+          "vrf": "ACME",
+          "ipv4": "172.16.22.1/31",
+          "ipv6": "2001:db8:22::1/127",
+          "prefix4": "10.60.2.2/32",
+          "prefix6": "2001:db8:60:2::2/128"
+        }
+      ]
+    },
+    {
+      "name": "BETA",
+      "rt": "65000:200",
+      "rdByNode": {
+        "PE1": "65000:201",
+        "PE2": "65000:202"
+      },
+      "sites": [
+        {
+          "ce": "CE-B1",
+          "pe": "PE1",
+          "asn": 65021,
+          "site": 1,
+          "vrf": "BETA",
+          "ipv4": "172.16.11.1/31",
+          "ipv6": "2001:db8:11::1/127",
+          "prefix4": "10.60.1.1/32",
+          "prefix6": "2001:db8:60:1::1/128"
+        },
+        {
+          "ce": "CE-B2",
+          "pe": "PE2",
+          "asn": 65022,
+          "site": 2,
+          "vrf": "BETA",
+          "ipv4": "172.16.22.1/31",
+          "ipv6": "2001:db8:22::1/127",
+          "prefix4": "10.60.2.2/32",
+          "prefix6": "2001:db8:60:2::2/128"
+        }
+      ]
+    }
+  ],
+  "addressing": {
+    "providerAs": 65000,
+    "coreMtu": 1600,
+    "ipv4Mtu": 1500,
+    "loopbackCost": 1,
+    "ospfProcess": "CORE",
+    "ospfArea": "0",
+    "pe1ToPe2Metric": 31,
+    "pe1ToRr1Metric": 21,
+    "transport": "IPv4 OSPF and LDP; VPNv4/vpnv6 over IPv4 loopback iBGP",
+    "isolationTest": {
+      "tenant": "ACME",
+      "origin": "CE-A2",
+      "interface": "Loopback99",
+      "prefix4": "198.51.100.222/32",
+      "prefix6": "2001:db8:ac:2::222/128",
+      "positive": "CE-A1 to unique ACME marker using Loopback0 source",
+      "negative": "Marker absent from BETA VRFs and global RIB; negative BETA probes only supporting evidence"
+    }
+  },
+  "policies": {
+    "xr": [
+      "VPN-S1-IN4",
+      "VPN-S1-OUT4",
+      "VPN-S1-IN6",
+      "VPN-S1-OUT6",
+      "VPN-S2-IN4",
+      "VPN-S2-OUT4",
+      "VPN-S2-IN6",
+      "VPN-S2-OUT6",
+      "DROP-ALL"
+    ],
+    "xe": [
+      "CE-IN4",
+      "CE-OUT4",
+      "CE-IN6",
+      "CE-OUT6"
+    ],
+    "baselinePrefixesOnly": true
+  },
+  "configDirectories": [
+    "initial",
+    "stages/01-underlay",
+    "stages/02-vrfs",
+    "stages/03-pe-ce",
+    "stages/04-vpnv4",
+    "stages/05-vpnv6",
+    "final",
+    "faults",
+    "optional/isolation",
+    "optional/same-as/01-change-as",
+    "optional/same-as/02-allowas-in",
+    "optional/same-as/03-remove-allowas-in",
+    "optional/same-as/04-restore-as",
+    "optional/same-as/provider-rpl"
+  ],
+  "optionalSameAs": {
+    "customerAs": 65011,
+    "remediation": "Conditional IOS XE allowas-in1 comparison; additional targeted provider RPL replace as-path65011 alternative; verify advertisements and paths",
+    "scope": "Both ACME CEs, single-homed isolated lab, exact prefix allowlists retained",
+    "xrNativeAsOverride": "Deprecated from XR7.11.1; not recommended as nativeCLI; not shipped",
+    "providerRpl": {
+      "path": "optional/same-as/provider-rpl",
+      "policies": [
+        "SAME-AS-S1-OUT4",
+        "SAME-AS-S1-OUT6",
+        "SAME-AS-S2-OUT4",
+        "SAME-AS-S2-OUT6"
+      ],
+      "operation": "replace as-path '65011' with local65000 within exact destination allowlist",
+      "scope": "ACME CE outbound only, both AFs; no whole-path/private-AS replacement"
+    }
+  }
+}
