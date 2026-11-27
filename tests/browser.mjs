@@ -367,7 +367,7 @@ try {
     const stageContent = main.locator('section.content-unit#' + stage)
     await stageContent.waitFor({ state: 'visible' })
     assert.equal(await main.locator('section.content-unit').count(), 1)
-    assert.ok((await stageContent.locator('.blocks').innerText()).length > 300)
+    assert.ok((await stageContent.locator(':scope > .blocks').innerText()).length > 300)
   }
   await page.keyboard.press('Control+k')
   await search.getByRole('textbox').fill('mpls-l3vpn show bgp vpnv4 unicast')
