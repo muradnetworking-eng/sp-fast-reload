@@ -346,6 +346,7 @@ try {
   await main.getByRole('link', { name: l3vpnTitle, exact: true }).click()
   await main.getByRole('heading', { name: l3vpnTitle, exact: true }).waitFor()
   const l3vpnPaths = page.getByRole('combobox', { name: 'Preparation path' })
+  await l3vpnPaths.waitFor({ state: 'visible' })
   assert.equal(await l3vpnPaths.locator('option').count(), 7)
   for (const pathId of ['emergency', 'review', 'zero', 'hands-on', 'senior', 'architect', 'instructor']) {
     await l3vpnPaths.selectOption(pathId)
