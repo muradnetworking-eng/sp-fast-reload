@@ -1,6 +1,6 @@
 # SP Fast-Reload
 
-A browser-local Cisco service provider engineering workspace with developed MPLS L3VPN, MPLS Foundations, Segment Routing over MPLS, and BGP / MP-BGP modules. The library includes 16 additional domains marked **Not Yet Developed**.
+A browser-local Cisco service provider engineering workspace with developed L2VPN, MPLS L3VPN, MPLS Foundations, Segment Routing over MPLS, and BGP / MP-BGP modules. The library includes 15 additional domains marked **Not Yet Developed**.
 
 ## Start locally
 
@@ -19,12 +19,22 @@ Open the local URL printed by Vite. Start at **Dashboard**, then use **15-Min Re
 | --- | --- |
 | `src/components/` | Dashboard, library, topic viewer, search, labs, practice, flashcards, and readiness |
 | `src/data/library.ts` | Technology taxonomy and module discovery |
-| `src/data/technologies/<id>/` | Independent MPLS L3VPN, MPLS Foundations, SR-MPLS, and BGP modules with a refresher, seven learning stages, recipes and lab, troubleshooting, scenarios, interviews, training, cards, and primary sources |
+| `src/data/technologies/<id>/` | Independent L2VPN, MPLS L3VPN, MPLS Foundations, SR-MPLS, and BGP modules with a refresher, seven learning stages, recipes and lab, troubleshooting, scenarios, interviews, training, cards, and primary sources |
 | `src/schemas/` and `src/lib/` | Content contract, path assembly, search index, content validation, and downloads |
 | `src/state/` | Versioned local progress, review scheduling, and evidence |
 | `public/downloads/<id>/` | Lab topology, student workbook, instructor key, configurations, ZIP, and Anki deck for each developed module |
 | `tests/` | Progress and module checks, topology assertions, and production browser acceptance |
 | `.github/workflows/deploy.yml` | GitHub Actions build and Pages deployment |
+
+## Use the L2VPN module
+
+Open **Technology Library → L2VPN**. Start with the point-to-point VPWS packet walk, then add a three-PE VPLS service and inspect MAC learning, unknown-destination flooding, and pseudowire split horizon. Separate customer VLAN classification, PW identity, service labels, and core transport throughout the lessons.
+
+The eight-router lab uses five IOS XR provider routers and three IOS XE customer routers. CE1 and CE2 share a VLAN 100 VPWS service; all three CEs participate in VLAN 200 VPLS. The PEs normalize each local service tag before Ethernet PW transport. Build the underlay, attachment circuits, VPWS, and VPLS in separate checkpoints. The workbook includes IPv4/IPv6 CE traffic, MAC and label evidence, fault injection, restoration, and a VLAN translation experiment. The student tasks and instructor solutions are separate downloads.
+
+Control-plane session state, negotiated PW state, core LSP tests, and customer Ethernet delivery establish different evidence. The lessons cover control words, service and transport MTU, VCCV, MAC aging and movement, flooding and loop controls, redundancy, signaling alternatives, and migration to EVPN. Platform and release support are qualified for each command set. The baseline is a manually constructed teaching topology; the configurations and modeled outputs have not been executed on Cisco devices or emulators.
+
+Progress, preferences, bookmarks, and flashcard reviews use the independent `l2vpn` namespace. Existing backups retain the other modules' records.
 
 ## Use the MPLS L3VPN module
 
@@ -74,7 +84,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-The browser test serves `dist` beneath `/sp-fast-reload/`, opens bookmarked hash routes directly, reloads them, exercises all four modules, checks file downloads, and verifies isolation of their study and review data. To use an existing Chromium or Chrome executable, set `SP_RELOAD_CHROME` to its absolute path. Use `npm run preview` to preview the production build at the local URL printed by Vite.
+The browser test serves `dist` beneath `/sp-fast-reload/`, opens bookmarked hash routes directly, reloads them, exercises all five modules, checks file downloads, and verifies isolation of their study and review data. To use an existing Chromium or Chrome executable, set `SP_RELOAD_CHROME` to its absolute path. Use `npm run preview` to preview the production build at the local URL printed by Vite.
 
 ## Deploy to personal GitHub Pages
 
@@ -96,7 +106,7 @@ Vite uses a relative base and React Router uses `HashRouter`, so the static host
 
 Use **My Readiness → Export Progress (JSON)** to save a portable backup. In another browser, open **My Readiness → Import Progress (JSON)**, select the file, and confirm **Replace progress**. Use **Reset progress** and confirm to start over. The backup includes notes you entered, so store it accordingly. Each browser profile and site origin has its own data.
 
-Use **Flashcards / Anki → Export Anki TSV** to export the selected technology and subtopic. In Anki, use a note type with fields `ID`, `Front`, and `Back`. Map the final column to tags and enable HTML. Use `ID` as the first field for stable import matching. Each developed module has an `.apkg` download. To regenerate a deck after changing source cards, install `genanki==0.13.1` in a Python environment after `npm ci`, then run `python scripts/build-anki.py --technology <id>` with `mpls-l3vpn`, `mpls-foundations`, `bgp`, or `sr-mpls`. The builder verifies the package's SQLite integrity, stable note GUIDs, card linkage, and exact source fields before replacing the output file.
+Use **Flashcards / Anki → Export Anki TSV** to export the selected technology and subtopic. In Anki, use a note type with fields `ID`, `Front`, and `Back`. Map the final column to tags and enable HTML. Use `ID` as the first field for stable import matching. Each developed module has an `.apkg` download. To regenerate a deck after changing source cards, install `genanki==0.13.1` in a Python environment after `npm ci`, then run `python scripts/build-anki.py --technology <id>` with `l2vpn`, `mpls-l3vpn`, `mpls-foundations`, `bgp`, or `sr-mpls`. The builder verifies the package's SQLite integrity, stable note GUIDs, card linkage, and exact source fields before replacing the output file.
 
 ## Add the next technology
 

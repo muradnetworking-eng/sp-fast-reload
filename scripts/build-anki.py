@@ -35,6 +35,10 @@ DECKS = {
         "title": "MPLS L3VPN", "deck_id": 1888055632, "model_id": 1661307140,
         "model_name": "SP Fast-Reload L3VPN Basic", "template": "L3VPN review",
     },
+    "l2vpn": {
+        "title": "L2VPN", "deck_id": 1888055633, "model_id": 1661307141,
+        "model_name": "SP Fast-Reload L2VPN Basic", "template": "L2VPN review",
+    },
 }
 
 

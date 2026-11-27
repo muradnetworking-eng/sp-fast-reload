@@ -1,0 +1,192 @@
+{
+  "technology": "l2vpn",
+  "reviewed": "2026-11-27",
+  "validation": "Primary documentation reviewed; configurations and modeled outputs have not been executed on Cisco devices or emulators. Qualify VPWS and VPLS forwarding support independently on the selected platform.",
+  "sources": [
+    {
+      "title": "RFC 3985 · Pseudowire Emulation Edge-to-Edge Architecture",
+      "url": "https://www.rfc-editor.org/rfc/rfc3985.html",
+      "scope": "Attachment circuits, forwarders, adaptation and packet-switched transport"
+    },
+    {
+      "title": "RFC 8077 · Pseudowire Setup and Maintenance Using LDP",
+      "url": "https://www.rfc-editor.org/rfc/rfc8077.html",
+      "scope": "Current LDP PW standard; obsoletes RFC 4447/6723. FEC 128/129, labels, parameters, status and control-word negotiation"
+    },
+    {
+      "title": "RFC 4448 · Encapsulation Methods for Transport of Ethernet over MPLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc4448.html",
+      "scope": "Raw/tagged Ethernet PW types, service-delimiting tags, FCS and MTU"
+    },
+    {
+      "title": "RFC 4385 · PWE3 Control Word for Use over an MPLS PSN",
+      "url": "https://www.rfc-editor.org/rfc/rfc4385.html",
+      "scope": "Four-byte CW, payload disambiguation and associated channel"
+    },
+    {
+      "title": "RFC 8469 · Recommendation to Use the Ethernet Control Word",
+      "url": "https://www.rfc-editor.org/rfc/rfc8469.html",
+      "scope": "Updates RFC 4448; CW recommendation to avoid payload misclassification and ECMP misordering"
+    },
+    {
+      "title": "RFC 4762 · VPLS Using LDP Signaling",
+      "url": "https://www.rfc-editor.org/rfc/rfc4762.html",
+      "scope": "MAC learning, full mesh, flooding, PW split horizon, MAC withdrawal and hierarchical VPLS"
+    },
+    {
+      "title": "RFC 4761 · VPLS Using BGP for Auto-Discovery and Signaling",
+      "url": "https://www.rfc-editor.org/rfc/rfc4761.html",
+      "scope": "BGP VPLS membership, label blocks and signaling distinct from LDP VPLS"
+    },
+    {
+      "title": "RFC 6074 · Provisioning, Auto-Discovery, and Signaling in L2VPNs",
+      "url": "https://www.rfc-editor.org/rfc/rfc6074.html",
+      "scope": "Separate discovery from signaling; BGP discovery can accompany LDP PW signaling"
+    },
+    {
+      "title": "RFC 5085 · Pseudowire Virtual Circuit Connectivity Verification",
+      "url": "https://www.rfc-editor.org/rfc/rfc5085.html",
+      "scope": "VCCV control channels and connectivity verification capability negotiation"
+    },
+    {
+      "title": "RFC 5885 · BFD for Pseudowire VCCV",
+      "url": "https://www.rfc-editor.org/rfc/rfc5885.html",
+      "scope": "PW connectivity verification and fault indication with BFD"
+    },
+    {
+      "title": "RFC 8029 · Detecting MPLS Data-Plane Failures",
+      "url": "https://www.rfc-editor.org/rfc/rfc8029.html",
+      "scope": "MPLS echo, target FECs, transport testing and return-path limits"
+    },
+    {
+      "title": "RFC 6718 · Pseudowire Redundancy",
+      "url": "https://www.rfc-editor.org/rfc/rfc6718.html",
+      "scope": "Redundancy framework, failure scope and single-/multi-homed services"
+    },
+    {
+      "title": "RFC 6870 · Pseudowire Preferential Forwarding Status Bit",
+      "url": "https://www.rfc-editor.org/rfc/rfc6870.html",
+      "scope": "Active/standby signaling and coordinated PW forwarding states"
+    },
+    {
+      "title": "RFC 5036 · LDP Specification",
+      "url": "https://www.rfc-editor.org/rfc/rfc5036.html",
+      "scope": "Link versus targeted Hellos, UDP/TCP 646, sessions and transport labels"
+    },
+    {
+      "title": "RFC 3032 · MPLS Label Stack Encoding",
+      "url": "https://www.rfc-editor.org/rfc/rfc3032.html",
+      "scope": "Four-byte entries, bottom-of-stack and implicit-null"
+    },
+    {
+      "title": "RFC 4182 · Removing a Restriction on MPLS Explicit NULL",
+      "url": "https://www.rfc-editor.org/rfc/rfc4182.html",
+      "scope": "Explicit-null above a remaining PW service label"
+    },
+    {
+      "title": "RFC 7432 · BGP MPLS-Based Ethernet VPN",
+      "url": "https://www.rfc-editor.org/rfc/rfc7432.html",
+      "scope": "EVPN MAC advertisements, Ethernet segments, designated forwarder and MPLS encapsulation"
+    },
+    {
+      "title": "RFC 8214 · Virtual Private Wire Service Support in EVPN",
+      "url": "https://www.rfc-editor.org/rfc/rfc8214.html",
+      "scope": "EVPN VPWS service signaling compared with classic LDP pseudowires"
+    },
+    {
+      "title": "RFC 8365 · A Network Virtualization Overlay Solution Using EVPN",
+      "url": "https://www.rfc-editor.org/rfc/rfc8365.html",
+      "scope": "EVPN overlay control plane, VXLAN-style encapsulation and VNI context"
+    },
+    {
+      "title": "RFC 8661 · Segment Routing MPLS Interworking with LDP",
+      "url": "https://www.rfc-editor.org/rfc/rfc8661.html",
+      "scope": "Transport migration while preserving service signaling dependencies"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · Point-to-Point L2 Services",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l2vpn/configuration/guide/b-l2vpn-cg-asr9000-711x/m-implement-point-to-point-layer-2-services.html",
+      "scope": "Local switching, MPLS PW setup, encapsulation, control word, redundancy and restrictions"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · Multipoint L2 Services",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l2vpn/configuration/guide/b-l2vpn-cg-asr9000-711x/implementing-multipoint-layer-2-services.html",
+      "scope": "Bridge groups/domains, VFI mesh PWs, MAC behavior, AC split horizon and VPLS discovery/signaling variants"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · Ethernet Features",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l2vpn/configuration/guide/b-l2vpn-cg-asr9000-711x/ethernet-features.html",
+      "scope": "Ethernet service classification, tag handling and release-specific access features"
+    },
+    {
+      "title": "Cisco ASR 9000 · Point-to-Point L2 Commands",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/lxvpn/command/reference/b-lxvpn-cr-asr9000/point-to-point-layer-2-services-commands.html",
+      "scope": "Xconnect/PW class hierarchy, transport mode, PW state and local/remote parameter evidence"
+    },
+    {
+      "title": "Cisco ASR 9000 · Multipoint L2 Commands",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/lxvpn/command/reference/b-lxvpn-cr-asr9000/multipoint-layer-2-services-commands.html",
+      "scope": "Bridge-domain verification and location-qualified forwarding/MAC commands"
+    },
+    {
+      "title": "Cisco TAC · Understand IOS XR L2VPN Services and Features",
+      "url": "https://www.cisco.com/c/en/us/support/docs/routers/asr-9000-series-aggregation-services-routers/116453-technote-ios-xr-l2vpn-00.html",
+      "scope": "Source-qualified EVC rewrite, explicit PW control-word examples, raw/tagged mode and forwarding evidence"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · MPLS LDP",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/mpls/configuration/guide/b-mpls-cg-asr9000-711x/implementing-mpls-ldp.html",
+      "scope": "Stable LDP IDs/transport endpoints, targeted discovery and core LDP transport"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · MPLS OAM",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/mpls/configuration/guide/b-mpls-cg-asr9000-711x/implementing-mpls-oam.html",
+      "scope": "Transport LSP echo/traceroute and PW VCCV scope"
+    },
+    {
+      "title": "Cisco ASR 9000 · MPLS OAM Commands",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/mpls/command/reference/b-mpls-cr-asr9000/mpls-oam-commands.html",
+      "scope": "ping mpls pseudowire remote-PE PW-ID grammar and transport OAM options"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · OSPF",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/routing/configuration/guide/b-routing-cg-asr9000-711x/implementing-ospf.html",
+      "scope": "OSPF underlay hierarchy, point-to-point interfaces and explicit loopback cost"
+    },
+    {
+      "title": "Cisco TAC · MTU Behavior on IOS XR and IOS",
+      "url": "https://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-xr-software/116350-trouble-ios-xr-mtu-00.html",
+      "scope": "XR Ethernet/header accounting, inherited subinterface MTU and rewrite effects; distinguish signaled PW MTU from frame budgets"
+    },
+    {
+      "title": "Cisco IOS XE 17 · Routing Between VLANs with IEEE 802.1Q",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/lan-wan/b-lan-wan/m_lnsw-conf-vlan-ieee.html",
+      "scope": "CE tagged routed subinterfaces; this does not establish PE MPLS/VPLS support on arbitrary XE hardware"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · EVPN Features",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l2vpn/configuration/guide/b-l2vpn-cg-asr9000-711x/evpn-features.html",
+      "scope": "Scoped Cisco EVPN comparison and platform dependencies, outside the LDP-VPLS baseline"
+    },
+    {
+      "title": "Cisco ASR 9000 IOS XR 7.11 · EVPN VPWS",
+      "url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/711x/l2vpn/configuration/guide/b-l2vpn-cg-asr9000-711x/evpn-virtual-private-wire-service.html",
+      "scope": "EVPN VPWS comparison; verify chapter/platform support before implementing the migration"
+    },
+    {
+      "title": "Cisco Nexus 9000 NX-OS 10.5(x) · VXLAN BGP EVPN",
+      "url": "https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/105x/configuration/vxlan/cisco-nexus-9000-series-nx-os-vxlan-configuration-guide-release-105x/m_configuring_vxlan_bgp_evpn.html",
+      "scope": "Scoped VXLAN/EVPN alternative and platform restrictions; not evidence of generic MPLS/LDP/VPLS support"
+    },
+    {
+      "title": "Cisco Modeling Labs · IOS XRv 9000",
+      "url": "https://developer.cisco.com/docs/modeling-labs/ios-xrv-9000/",
+      "scope": "The documented L2 MPLS feature test is point-to-point VPWS; it does not validate VPLS/VFI bridge forwarding. Resources and throughput limits are image-specific."
+    },
+    {
+      "title": "Cisco Modeling Labs · Legacy IOS XRv",
+      "url": "https://developer.cisco.com/docs/modeling-labs/ios-xrv/",
+      "scope": "Deprecated 32-bit XRv: documented point-to-point L2 MPLS control plane can form while data forwarding does not work; distinct from XRv 9000"
+    }
+  ]
+}
